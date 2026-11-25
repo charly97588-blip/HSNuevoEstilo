@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nuevo Estilo | Hair Studio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --negro:#090807; --panel:#18140f; --oro:#d4a25e; --claro:#f1d4a5; --texto:#f7f0e5; --gris:#b8ab99; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--negro); color:var(--texto); font-family:Montserrat,Arial,sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    button, input, select, textarea { font:inherit; }
+    button { cursor:pointer; }
+    h1,h2,h3 { font-family:'Cormorant Garamond',Georgia,serif; font-weight:600; }
+    h2 { font-size:clamp(36px,5vw,55px); color:var(--claro); }
+    .eyebrow { color:var(--oro); text-transform:uppercase; letter-spacing:3px; font-size:11px; }
+    .btn { border:1px solid var(--oro); background:linear-gradient(110deg,#f1c67f,#b37b34); color:#160f08; padding:13px 22px; display:inline-block; font-size:12px; font-weight:700; text-transform:uppercase; }
+    .btn:hover { filter:brightness(1.14); }
+    .btn-outline { background:transparent; color:var(--claro); }
+    .topline { height:3px; background:linear-gradient(90deg,#543716,#f1ca8a,#543716); }
+    header { background:#090807f5; border-bottom:1px solid var(--oro); position:sticky; top:0; z-index:30; }
+    .nav { max-width:1300px; margin:auto; padding:8px 4%; min-height:83px; display:flex; align-items:center; gap:25px; justify-content:space-between; }
+    .logo { width:225px; max-height:80px; object-fit:contain; }
+    nav { display:flex; gap:25px; align-items:center; }
+    nav a { font-size:12px; text-transform:uppercase; }
+    nav a:hover { color:var(--oro); }
+    .hamburger { display:none; border:1px solid var(--oro); color:var(--claro); background:none; padding:8px 11px; }
+    .shop-nav { white-space:nowrap; border-left:1px solid var(--oro); padding-left:18px; font-size:12px; }
+    #cartBadge { background:var(--oro); color:#111; border-radius:50%; padding:3px 7px; margin-left:5px; font-weight:bold; }
+    section { padding:80px 7%; scroll-margin-top:95px; }
+    .section-title { text-align:center; max-width:750px; margin:0 auto 37px; }
+    .section-title h2 { margin:10px 0; }
+    .section-title p { color:var(--gris); font-size:13px; line-height:1.8; }
+    .hero { min-height:550px; display:flex; align-items:center; background:linear-gradient(90deg,#050505f5 0%,#060504ca 48%,#05050433),url('portada pagina web.png') center/cover; border-bottom:2px solid var(--oro); }
+    .hero-content { max-width:600px; }
+    .hero h1 { font-size:clamp(55px,7vw,88px); line-height:.98; margin:20px 0; color:var(--claro); }
+    .hero p { line-height:1.9; color:#eddfcd; max-width:480px; }
+    .hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:30px; }
+    .about { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:50px; background:linear-gradient(125deg,#080807,#21180e,#080807); }
+    .about img { width:100%; height:350px; object-fit:cover; border:1px solid var(--oro); }
+    .about p { color:var(--gris); font-size:13px; line-height:1.9; margin:16px 0; }
+    .services { background:#100e0b; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .card { border:1px solid #9f733e; background:linear-gradient(#211b15,#0c0b09); overflow:hidden; }
+    /* GALERÍAS DESLIZABLES DE SERVICIOS */
+    .service-slider { position:relative; overflow:hidden; background:#120e0a; }
+    .slide-viewport { overflow:hidden; touch-action:pan-y; outline-offset:-3px; }
+    .slide-track { display:flex; transition:transform .38s ease; will-change:transform; }
+    .slide-track img { width:100%; min-width:100%; flex:0 0 100%; height:220px; object-fit:cover; display:block; user-select:none; }
+    .slide-arrow { position:absolute; top:43%; transform:translateY(-50%); z-index:2;
+      width:34px; height:38px; display:grid; place-items:center; border:1px solid #d4a25e;
+      color:#f8e4bb; background:#090807c9; font-size:22px; border-radius:4px; }
+    .slide-arrow:hover, .slide-arrow:focus-visible { background:#d4a25e; color:#100a06; }
+    .slide-prev { left:9px; } .slide-next { right:9px; }
+    .slide-counter { position:absolute; top:10px; right:10px; z-index:2; font-size:11px;
+      color:#f9e4b8; background:#080706c7; padding:6px 9px; border:1px solid #9f733e; }
+    .slide-dots { display:flex; justify-content:center; align-items:center; gap:9px;
+      height:31px; background:#110e0a; border-top:1px solid #543b22; }
+    .slide-dot { width:9px; height:9px; background:#79664f; border:0; border-radius:100%; padding:0; }
+    .slide-dot.active { width:11px; height:11px; background:#e4b779; box-shadow:0 0 0 2px #e4b77926; }
+    @media(prefers-reduced-motion:reduce){ .slide-track{transition:none;} }
+    
+    .card-body { padding:18px; }
+    .card h3 { color:var(--claro); font-size:27px; }
+    .card p { color:var(--gris); font-size:12px; line-height:1.7; margin:9px 0 17px; min-height:42px; }
+    .card-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    .price { color:var(--claro); font-weight:600; font-size:14px; }
+    .small-btn { padding:9px 12px; background:transparent; border:1px solid var(--oro); color:var(--claro); font-size:11px; }
+    .small-btn:hover { background:var(--oro); color:#100c07; }
+    .small { color:#a99b88; font-size:11px; line-height:1.6; margin-top:15px; }
+    .portfolio { background:radial-gradient(ellipse at top right,#302010,#080807 65%); }
+    .filters { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:25px; }
+    .filter { border:1px solid var(--oro); color:var(--claro); background:transparent; padding:9px 16px; border-radius:30px; }
+    .filter.active { background:var(--oro); color:#15100a; }
+    .gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; }
+    .gallery figure { position:relative; border:1px solid var(--oro); height:280px; overflow:hidden; border-radius:9px; }
+    .gallery img { width:100%; height:100%; object-fit:cover; transition:transform .3s; }
+    .gallery figure:hover img { transform:scale(1.04); }
+    .gallery figcaption { position:absolute; left:0; right:0; bottom:0; background:linear-gradient(transparent,#000e); padding:28px 14px 13px; color:var(--claro); }
+    .contact { background:#100e0b; }
+    .contact-layout { max-width:950px; margin:auto; display:grid; grid-template-columns:1fr 1.4fr; gap:50px; }
+    .contact-info h3 { color:var(--claro); font-size:33px; }
+    .contact-info p { color:var(--gris); line-height:1.9; font-size:13px; margin:14px 0; }
+    input,textarea,select { background:#17130f; color:#fff; border:1px solid #a37a47; padding:13px; width:100%; }
+    input:focus,textarea:focus,select:focus { outline:1px solid var(--claro); }
+    option { background:#17130f; }
+    form { display:grid; gap:13px; }
+    .shop { background:linear-gradient(135deg,#20180f,#080807 65%); }
+    .shop-layout { display:grid; grid-template-columns:1.5fr .8fr; gap:27px; align-items:start; }
+    .shop .slide-track img { height:185px; }
+    .cart { background:#100e0b; border:1px solid var(--oro); padding:24px; position:sticky; top:108px; }
+    .cart h3 { font-size:30px; color:var(--claro); }
+    .cart-item { padding:12px 0; display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1px solid #644626; font-size:12px; }
+    .cart-item small { color:var(--gris); }
+    .cart-item button { background:none; border:0; color:var(--oro); }
+    .cart-total { display:flex; justify-content:space-between; margin:20px 0; color:var(--claro); font-weight:bold; }
+    .wide { width:100%; }
+    footer { padding:30px 8%; border-top:1px solid var(--oro); text-align:center; background:#050504; font-size:11px; color:var(--gris); }
+    .footer-links { display:flex; justify-content:center; flex-wrap:wrap; gap:23px; margin-bottom:14px; }
+    .modal { display:none; position:fixed; inset:0; background:#000e; z-index:100; padding:16px; place-items:center; }
+    .modal.open { display:grid; }
+    .modal-box {
+    width: min(650px, 95vw);
+    max-width: 95vw;
+    max-height: 90vh;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background: #100e0b;
+    border: 1px solid #d4a25e;
+    border-radius: 12px;
+
+    padding: 30px;
+    margin: auto;
+
+    box-sizing: border-box;
+}
+    .summary { border:1px solid #79572f; padding:13px; margin:17px 0; color:var(--claro); font-size:12px; line-height:1.8; }
+    .form-label { color:var(--claro); font-size:12px; }
+    .payment-methods { display:flex; gap:10px; margin:17px 0; }
+    .payment-methods button { flex:1; background:#1a140e; border:1px solid var(--oro); color:var(--claro); padding:15px; }
+    .payment-methods button.selected { background:var(--oro); color:#110e08; font-weight:bold; }
+    .notice { background:#251b10; border-left:3px solid var(--oro); padding:12px; color:var(--claro); font-size:11px; line-height:1.6; margin:14px 0; }
+    .modal-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:9px; margin-top:18px; }
+    .cancel { background:transparent; border:1px solid var(--oro); color:var(--claro); padding:12px 18px; }
+    .hidden { display:none!important; }
+    @media(max-width:900px){
+      .hamburger { display:block; }
+      nav { display:none; position:absolute; top:75px; left:0; right:0; background:#080807; border-bottom:1px solid var(--oro); padding:24px; flex-direction:column; align-items:flex-start; }
+      nav.open { display:flex; }
+      .nav { min-height:75px; }
+      .logo { width:180px; }
+      .shop-nav { border:0; padding-left:0; margin-left:auto; }
+      .about,.shop-layout,.contact-layout { grid-template-columns:1fr; }
+      .cart { position:static; }
+    }
+    @media(max-width:620px){
+      section { padding:60px 6%; }
+      .grid,.gallery { grid-template-columns:repeat(2,1fr); gap:12px; }
+      .slide-track img { height:170px; }
+      .card-body { padding:12px; }
+      .card h3 { font-size:23px; }
+      .gallery figure { height:210px; }
+      .hero { min-height:500px; background-position:60% center; }
+    }
+    @media(max-width:420px){ .grid,.gallery { grid-template-columns:1fr; }.logo { width:145px; } }
+/* ENLACE DEL AVISO DE PRIVACIDAD */
+
+.enlace-privacidad {
+    display: inline-block;
+    margin-top: 15px;
+    color: #d4a25e;
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.enlace-privacidad:hover {
+    color: #f1d4a5;
+    text-decoration: underline;
+}
+#stepPayment {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+#stepPayment .payment-methods {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    width: 100%;
+}
+
+#stepPayment .payment-methods button {
+    flex: 1 1 0;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+
+/* CORRECCIÓN BOTÓN PAYPAL */
+
+.payment-methods {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.payment-methods button {
+    flex: 1;
+    min-width: 0;
+}
+
+.paypal-contenedor {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 20px;
+    margin: 20px 0;
+
+    background: #17130f;
+    border: 1px solid #d4a25e;
+    border-radius: 10px;
+
+    box-sizing: border-box;
+}
+
+#paypal-container-3YKBWLNJHS7UQ {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+#stepPayment {
+    width: 100%;
+    min-width: 0;
+}
+
+.modal-box {
+    width: min(650px, 95vw);
+    max-width: 95vw;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+  </style>
+<script 
+  src="https://www.paypal.com/sdk/js?client-id=BAA8rwANiV_STg4xHwPTsdF7ZE7MmRtntouRZMPOD6okasN8GIf7rUbiU5M1ICQ1kfAI3iHJcwlKp3SnlA&components=hosted-buttons&disable-funding=venmo&currency=MXN">
+</script>
+</head>
+<body>
+  <div class="topline"></div>
+  <header>
+    <div class="nav">
+      <a href="#inicio"><img class="logo" src="logo_transparente_og.png" alt="Nuevo Estilo Hair Studio"></a>
+      <button class="hamburger" onclick="document.getElementById('menu').classList.toggle('open')" aria-label="Abrir menú">☰</button>
+      <nav id="menu">
+        <a href="#inicio">Home</a><a href="#servicios">Servicios</a>
+        <a href="#portafolio">Portafolio</a><a href="#contacto">Contacto</a>
+      </nav>
+      <a class="shop-nav" href="#shop">🛍 SHOP <span id="cartBadge">0</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-content">
+        <span class="eyebrow">NUEVO ESTILO · HAIR STUDIO</span>
+        <h1>Nuevo Estilo.<br>Eleva tu arte.</h1>
+        <p>Descubre un espacio donde el arte, la belleza y el cuidado se unen para resaltar tu esencia.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#shop">Agendar cita</a>
+          <a class="btn btn-outline" href="#portafolio">Ver portafolio</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="about">
+      <img src="portada pagina web.png" alt="Interior de salón de belleza">
+      <div><span class="eyebrow">NUESTRO SALÓN</span><h2>La belleza es un arte</h2>
+        <p>En Nuevo Estilo Hair Studio buscamos que cada visita sea una experiencia personalizada, desde la asesoría hasta el resultado final.</p>
+        <p>Explora los servicios que hemos preparado para ti y encuentra inspiración en nuestro portafolio.</p>
+        <a class="btn btn-outline" href="#servicios">Conoce los servicios</a>
+      </div>
+    </section>
+
+    <section class="services" id="servicios">
+      <div class="section-title"><span class="eyebrow">CATÁLOGO</span><h2>Servicios</h2><p>Desliza las fotografías de cada servicio para conocer más ejemplos.</p></div>
+      <div class="grid" id="serviceCards"></div>
+    </section>
+
+    <section class="portfolio" id="portafolio">
+      <div class="section-title"><span class="eyebrow">NUESTRO TRABAJO</span><h2>Portafolio</h2></div>
+      <div class="filters">
+        <button class="filter active" data-filter="todos">Todos</button>
+        <button class="filter" data-filter="cortes">Cortes</button>
+        <button class="filter" data-filter="color">Color</button>
+        <button class="filter" data-filter="peinados">Peinados</button>
+      </div>
+      <div class="gallery" id="gallery"></div>
+    </section>
+
+    <section class="contact" id="contacto">
+      <div class="section-title"><span class="eyebrow">ESTAMOS PARA TI</span><h2>Contáctanos</h2><p>¿Tienes dudas sobre un servicio? Cuéntanos.</p></div>
+      <div class="contact-layout">
+        <div class="contact-info"><h3>Nuevo Estilo Hair Studio</h3>
+          <p>✦ Atención personalizada</p><p>✦ Asesoría de servicios</p>
+          <p>✦ Dirección y horario: pendientes de agregar</p>
+          <p>✦ Redes sociales: pendientes de agregar</p>
+        </div>
+        <form id="contactForm">
+          <input id="contactName" placeholder="Nombre" required>
+          <input id="contactEmail" type="email" placeholder="Correo electrónico" required>
+          <select id="contactService" required><option value="">Tipo de servicio</option><option>Corte</option><option>Color</option><option>Peinado</option><option>Uñas</option><option>Pestañas</option><option>Tratamientos</option></select>
+          <textarea id="contactMessage" rows="4" placeholder="Duda o comentario"></textarea>
+          <button class="btn" type="submit">Preparar consulta</button>
+         </form>
+      </div>
+    </section>
+
+    <section class="shop" id="shop">
+      <div class="section-title"><span class="eyebrow">SHOP · AGENDA Y PAGA</span><h2>Reserva tu servicio</h2><p>Explora las fotografías y agrega tus servicios al carrito para visualizar una cotización.</p></div>
+      <div class="shop-layout">
+        <div class="grid" id="shopCards"></div>
+        <aside class="cart">
+          <h3>Tu carrito</h3>
+          <div id="cartItems"><p class="small">Aún no has agregado servicios.</p></div>
+          <div class="cart-total"><span>Total</span><span id="cartTotal">$0 MXN</span></div>
+          <button class="btn wide" onclick="openBooking()">Continuar con la cita</button>
+          <p class="small">Gracias por tu preferencia</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-links"><a href="#inicio">Inicio</a><a href="#servicios">Servicios</a><a href="#portafolio">Portafolio</a><a href="#contacto">Contacto</a><a href="#shop">Shop</a></div>
+    © 2026 Nuevo Estilo Hair Studio · Todos los derechos reservados · <a href="aviso-de-privacidad.html"
+   target="_blank"
+   rel="noopener noreferrer"
+   class="enlace-privacidad">
+   Aviso de privacidad
+</a> 
+  </footer>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Solicitud de cita">
+    <div class="modal-box">
+      <div id="stepBooking">
+        <h2>Agenda tu cita</h2><p>Indica tus datos y el horario que te gustaría solicitar.</p>
+        <div class="summary" id="bookingSummary"></div>
+        <form id="bookingForm">
+          <input id="bookingName" placeholder="Nombre completo" required>
+          <input id="bookingPhone" type="tel" placeholder="Teléfono" required>
+          <input id="bookingEmail" type="email" placeholder="Correo (opcional)">
+          <label class="form-label" for="bookingDate">Fecha solicitada</label>
+          <input id="bookingDate" type="date" required>
+          <label class="form-label" for="bookingTime">Horario preferido</label>
+          <select id="bookingTime" required><option value="">Selecciona un horario</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option></select>
+          <textarea id="bookingNotes" rows="3" placeholder="Notas adicionales (opcional)"></textarea>
+          <div class="notice">El horario es solamente una preferencia. La disponibilidad no se comprueba automáticamente.</div>
+          <div class="modal-actions"><button type="button" class="cancel" onclick="closeModal()">Cancelar</button><button class="btn" type="submit">Continuar al pago</button></div>
+        </form>
+      </div>
+      <div id="stepPayment" class="hidden">
+        <h2>Confirmar pago</h2><p>Selecciona un método de pago para esta demostración.</p>
+        <div class="summary" id="paymentSummary"></div>
+        <div class="payment-methods">
+          <button class="selected" onclick="setPayment(this,'PayPal')">PayPal</button>
+         	 <div id="paypal-container-3YKBWLNJHS7UQ"></div>
+	<script>
+  	paypal.HostedButtons({
+    	hostedButtonId: "3YKBWLNJHS7UQ",
+  	}).render("#paypal-container-3YKBWLNJHS7UQ")
+</script>
+        </div>
+        <div class="notice"><strong> </div>
+        <div class="modal-actions"><button class="cancel" onclick="showStep('stepBooking')">Volver</button><button class="btn" onclick="simulatePayment()">Simular pago</button></div>
+      </div>
+      <div id="stepSuccess" class="hidden">
+        <h2>Solicitud</h2><p id="successText"></p>
+        <div class="notice">Gracias por tu preferencia.</div>
+        <button class="btn wide" onclick="finishBooking()">Finalizar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    
+    // Las tarifas y duraciones siguientes son exclusivamente demostrativas.
+    const services = [
+      {name:'Corte de cabello', price:450, duration:60,
+       desc:'Diseño y corte adaptado a tu estilo.',
+       images:[
+         'cortes de cabello/corte_01.png',
+         'cortes de cabello/corte_02.png',
+         'cortes de cabello/corte_03.png'
+       ]},
+      {name:'Color / Balayage', price:1800, duration:180,
+       desc:'Colorimetría y efectos de luz.',
+       images:[
+         'tintes/cabello_blanco.png',
+         'tintes/cabello_rojo.png',
+         'tintes/cabello_rosa.png'
+       ]},
+      {name:'Peinado', price:650, duration:60,
+       desc:'Ondas, recogidos y looks especiales.',
+       images:[
+          'peinados/peinado_01.png',
+          'peinados/peinado_02.png'
+       ]},
+      {name:'Uñas', price:400, duration:60,
+       desc:'Manicure, gel y diseños.',
+       images:[
+          'uñas/uñas_01.png',
+          'uñas/uñas_02.png',
+          'uñas/uñas_03.png'
+       ]},
+      {name:'Pestañas', price:800, duration:90,
+       desc:'Servicio para destacar tu mirada.',
+       images:[
+          'pestañas/pestañas_01.png',
+          'pestañas/pestañas_02.png',
+       ]},
+      {name:'Tratamientos', price:850, duration:90,
+       desc:'Cuidado capilar y facial.',
+       images:[
+         'tratamientos/tratamiento_01.png',
+	 'tratamientos/tratamiento_02.png'
+       ]}
+    ];
+    const photos = [
+      {category:'cortes',label:'Cortes',img:'cortes de cabello/corte_02.png'},
+      {category:'color',label:'Color',img:'tintes/cabello_rojo.png'},
+      {category:'peinados',label:'Peinados',img:'peinados/peinado_02.png'},
+      {category:'cortes',label:'Uñas',img:'uñas/uñas_02.png'},
+      {category:'color',label:'Pestañas',img:'pestañas/pestañas_02.png'},
+      {category:'peinados',label:'Tratamiento',img:'tratamientos/tratamiento_02.png'}
+    ];
+    const cart=[];
+    let method='PayPal', booking=null;
+    const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
+    const total=()=>cart.reduce((sum,item)=>sum+item.price,0);
+    // Cada tarjeta tiene un carrusel independiente, también en SHOP.
+    function cardHTML(s,index,location){
+      const photos=s.images.map((src,i)=>
+        `<img src="${src}" alt="${s.name} - foto ilustrativa ${i+1}" loading="lazy" draggable="false">`
+      ).join('');
+      const dots=s.images.map((src,i)=>
+        `<button type="button" class="slide-dot ${i===0?'active':''}" data-target="${i}" aria-label="Mostrar foto ${i+1} de ${s.name}" aria-pressed="${i===0}"></button>`
+      ).join('');
+      return `<article class="card">
+        <div class="service-slider" data-position="0" data-count="${s.images.length}" aria-label="Fotografías de ${s.name}">
+          <div class="slide-viewport" tabindex="0" aria-label="Galería de ${s.name}. Usa las flechas o desliza.">
+            <div class="slide-track">${photos}</div>
+          </div>
+          <span class="slide-counter">1 / ${s.images.length}</span>
+          <button type="button" class="slide-arrow slide-prev" data-step="-1" aria-label="Foto anterior de ${s.name}">‹</button>
+          <button type="button" class="slide-arrow slide-next" data-step="1" aria-label="Foto siguiente de ${s.name}">›</button>
+          <div class="slide-dots">${dots}</div>
+        </div>
+        <div class="card-body">
+          <h3>${s.name}</h3><p>${s.desc}</p>
+          <div class="card-footer"><span class="price">${money(s.price)}*</span>
+            <button type="button" class="small-btn" onclick="addService(${index})">Agregar al carrito</button>
+          </div>
+          <p class="small">${s.duration} minutos aprox.</p>
+        </div>
+      </article>`;
+    }
+    document.getElementById('serviceCards').innerHTML=services.map((s,i)=>cardHTML(s,i,'servicios')).join('');
+    document.getElementById('shopCards').innerHTML=services.map((s,i)=>cardHTML(s,i,'shop')).join('');
+
+    function setSlide(slider,next){
+      if(!slider)return;
+      const count=Number(slider.dataset.count);
+      const position=(next+count)%count;
+      slider.dataset.position=position;
+      slider.querySelector('.slide-track').style.transform=`translateX(-${position*100}%)`;
+      slider.querySelector('.slide-counter').textContent=`${position+1} / ${count}`;
+      slider.querySelectorAll('.slide-dot').forEach((dot,i)=>{
+        dot.classList.toggle('active',i===position);
+        dot.setAttribute('aria-pressed',String(i===position));
+      });
+    }
+    // Flechas y puntos: el evento solo modifica el carrusel de esa tarjeta.
+    document.addEventListener('click',event=>{
+      const arrow=event.target.closest('.slide-arrow');
+      const dot=event.target.closest('.slide-dot');
+      if(!arrow&&!dot)return;
+      const slider=(arrow||dot).closest('.service-slider');
+      if(arrow)setSlide(slider,Number(slider.dataset.position)+Number(arrow.dataset.step));
+      if(dot)setSlide(slider,Number(dot.dataset.target));
+    });
+    // Deslizar con el dedo en celulares y tablets.
+    document.querySelectorAll('.slide-viewport').forEach(viewport=>{
+      let startX=0,startY=0;
+      viewport.addEventListener('touchstart',event=>{
+        if(event.touches.length!==1)return;
+        startX=event.touches[0].clientX;
+        startY=event.touches[0].clientY;
+      },{passive:true});
+      viewport.addEventListener('touchend',event=>{
+        if(!event.changedTouches.length)return;
+        const dx=event.changedTouches[0].clientX-startX;
+        const dy=event.changedTouches[0].clientY-startY;
+        if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.1){
+          const slider=viewport.closest('.service-slider');
+          setSlide(slider,Number(slider.dataset.position)+(dx<0?1:-1));
+        }
+      },{passive:true});
+      viewport.addEventListener('keydown',event=>{
+        if(!['ArrowLeft','ArrowRight'].includes(event.key))return;
+        event.preventDefault();
+        const slider=viewport.closest('.service-slider');
+        setSlide(slider,Number(slider.dataset.position)+(event.key==='ArrowRight'?1:-1));
+      });
+    });
+    document.getElementById('gallery').innerHTML=photos.map(p=>`<figure data-category="${p.category}"><img src="${p.img}" alt="${p.label}" loading="lazy"><figcaption>${p.label}</figcaption></figure>`).join('');
+    function addService(index){ cart.push({...services[index],id:Date.now()+Math.random()}); renderCart(); }
+    function removeService(id){ const index=cart.findIndex(item=>item.id===id); if(index!==-1)cart.splice(index,1); renderCart(); }
+    function renderCart(){
+      document.getElementById('cartBadge').textContent=cart.length;
+      document.getElementById('cartTotal').textContent=money(total());
+      document.getElementById('cartItems').innerHTML=cart.length?cart.map(x=>`<div class="cart-item"><span>${x.name}<br><small>${money(x.price)} · ${x.duration} min</small></span><button onclick="removeService(${x.id})">Quitar ✕</button></div>`).join(''):'<p class="small">Aún no has agregado servicios.</p>';
+    }
+    document.querySelectorAll('.filter').forEach(btn=>btn.onclick=()=>{
+      document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('#gallery figure').forEach(x=>x.style.display=btn.dataset.filter==='todos'||x.dataset.category===btn.dataset.filter?'block':'none');
+    });
+    document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>document.getElementById('menu').classList.remove('open'));
+    document.getElementById('contactForm').onsubmit=e=>{
+      e.preventDefault();
+      document.getElementById('contactResult').textContent='Consulta preparada (demostración). Para enviarla realmente habrá que conectar WhatsApp o un correo.';
+    };
+    function showStep(id){ ['stepBooking','stepPayment','stepSuccess'].forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id)); }
+    function openBooking(){
+      if(!cart.length){alert('Primero agrega un servicio al carrito.');return;}
+      const today=new Date(),yyyy=today.getFullYear(),mm=String(today.getMonth()+1).padStart(2,'0'),dd=String(today.getDate()).padStart(2,'0');
+      document.getElementById('bookingDate').min=`${yyyy}-${mm}-${dd}`;
+      document.getElementById('bookingSummary').innerHTML=cart.map(x=>`${x.name} — ${money(x.price)} (${x.duration} min)`).join('<br>')+`<br><strong>Total: ${money(total())}</strong>`;
+      showStep('stepBooking');document.getElementById('modal').classList.add('open');
+    }
+    function closeModal(){document.getElementById('modal').classList.remove('open');}
+    document.getElementById('bookingForm').onsubmit=e=>{
+      e.preventDefault();
+      booking={name:document.getElementById('bookingName').value.trim(),phone:document.getElementById('bookingPhone').value.trim(),date:document.getElementById('bookingDate').value,time:document.getElementById('bookingTime').value};
+      document.getElementById('paymentSummary').textContent=`Cliente: ${booking.name} | Fecha solicitada: ${booking.date} | Hora: ${booking.time} | Total: ${money(total())}`;
+      showStep('stepPayment');
+    };
+    function setPayment(btn,value){method=value;document.querySelectorAll('.payment-methods button').forEach(x=>x.classList.toggle('selected',x===btn));}
+    function simulatePayment(){
+      document.getElementById('successText').textContent=`${booking.name}, seleccionaste ${method} para un pago simulado de ${money(total())}. Fecha solicitada: ${booking.date}, ${booking.time}.`;
+      showStep('stepSuccess');
+    }
+    function finishBooking(){cart.length=0;booking=null;renderCart();document.getElementById('bookingForm').reset();closeModal();}
+    document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')closeModal();};
+    renderCart();
+  </script>
+</body>
+</html>
